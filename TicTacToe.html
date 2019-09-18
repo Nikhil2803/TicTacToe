@@ -1,0 +1,234 @@
+<html>
+
+<head>
+<title>TIC TAC TOE</title>
+<link rel="shortcut icon" type="image/x-icon" href="game.ico"/>
+<style>
+.container{
+position: absolute;
+white-space:nowrap;
+overflow:hidden;
+margin-top:10px;
+}
+</style>
+
+<script type="text/javascript">
+
+var OClicked = true;
+var gameFinished = false;
+var xClicked = [];
+var oClicked = [];
+var audioClick = new Audio('blop.wav');
+var audioMiss = new Audio('miss.wav');
+var audioWin = new Audio('win.mp3');
+var audioNoWin = new Audio('no-win.wav');
+function toggleClicks(element){
+	var id = element.id;
+	
+	if(!gameFinished){
+		if(OClicked){
+			if(!xClicked.includes(id) && !oClicked.includes(id)){
+				oClicked.push(id);
+				OClicked=false;
+				audioClick.play();
+				document.getElementById('img_'+id).src="alphaO.png";
+				setTimeout(checkForWin,500);
+			}else{
+				sizeBlipCell(id);	
+				audioMiss.play();
+			}
+		}else{
+			if(!xClicked.includes(id) && !oClicked.includes(id)){
+				xClicked.push(id);
+				OClicked=true;
+				audioClick.play();
+				document.getElementById('img_'+id).src="alphaX.png";
+				setTimeout(checkForWin,500);
+			}else{
+				sizeBlipCell(id);
+				audioMiss.play();
+			}
+		}
+	}else{
+		audioMiss.play();
+	}
+}
+
+function sizeBlipCell(id){
+
+	document.getElementById('img_'+id).width = 150;
+	document.getElementById('img_'+id).height = 150;
+	
+	var tmout = setTimeout(oriinalSize(id),5000);
+	clearTimeout(tmout);
+}
+
+function oriinalSize(id){
+	
+	document.getElementById('img_'+id).width = 130;
+	document.getElementById('img_'+id).height = 130;
+
+}
+function checkForWin(){
+
+	if (xClicked.length>=3){
+		if((xClicked.includes('13') && xClicked.includes('22') && xClicked.includes('31'))
+		|| (xClicked.includes('11') && xClicked.includes('22') && xClicked.includes('33'))){
+			document.getElementById('mssg').innerHTML = "<b>'X'</b> WON THE GAME !!!";
+			document.getElementById('button').innerHTML ="<input type=\"image\" src=\"button_green.png\" onClick=\"window.location.reload();\" width=\"100px\" height=\"50px\" />"
+			gameFinished = true;
+			audioWin.play();
+		}else{
+			var row1=0;
+			var row2=0;
+			var row3=0;
+			
+			var col1=0;
+			var col2=0;
+			var col3=0;
+			
+			for(var i=0;i<xClicked.length;i++){
+				switch(parseInt(xClicked[i].charAt(0))){
+					case 1: row1++;
+							break;
+					case 2: row2++;
+							break;
+					case 3: row3++;
+							break;
+				}
+				
+				switch(parseInt(xClicked[i].charAt(1))){
+					case 1: col1++;
+							break;
+					case 2: col2++;
+							break;
+					case 3: col3++;
+							break;
+				}
+				
+				if(row1==3 || row2==3 || row3==3
+				|| col1==3 || col2==3 || col3==3){
+				   document.getElementById('mssg').innerHTML = "<b>'X'</b> WON THE GAME !!!";
+					document.getElementById('button').innerHTML ="<input type=\"image\" src=\"button_green.png\" onClick=\"window.location.reload();\"  width=\"100px\" height=\"50px\" />"
+					gameFinished = true;
+					audioWin.play();
+				}
+			}
+
+		}
+	}
+	
+ if (oClicked.length>=3){
+		if((oClicked.includes('13') && oClicked.includes('22') && oClicked.includes('31'))
+		|| (oClicked.includes('11') && oClicked.includes('22') && oClicked.includes('33'))){
+			document.getElementById('mssg').innerHTML = "<b>'O'</b> WON THE GAME !!!";
+			document.getElementById('button').innerHTML ="<input type=\"image\" src=\"button_green.png\" onClick=\"window.location.reload();\"  width=\"100px\" height=\"50px\" />"
+			gameFinished = true;
+			audioWin.play();
+		}else{
+			var row1=0;
+			var row2=0;
+			var row3=0;
+			
+			var col1=0;
+			var col2=0;
+			var col3=0;
+			
+			for(var i=0;i<oClicked.length;i++){
+				switch(parseInt(oClicked[i].charAt(0))){
+					case 1: row1++;
+							break;
+					case 2: row2++;
+							break;
+					case 3: row3++;
+							break;
+				}
+				
+				switch(parseInt(oClicked[i].charAt(1))){
+					case 1: col1++;
+							break;
+					case 2: col2++;
+							break;
+					case 3: col3++;
+							break;
+				}
+				
+				if(row1==3 || row2==3 || row3==3
+				|| col1==3 || col2==3 || col3==3){
+				   document.getElementById('mssg').innerHTML = "<b>'O'</b> WON THE GAME !!!";
+				document.getElementById('button').innerHTML ="<input type=\"image\" src=\button_green.png\" onClick=\"window.location.reload();\"  width=\"100px\" height=\"50px\" />"
+					gameFinished = true;
+					audioWin.play();
+				}
+			}
+
+		}
+	}
+	
+	if(((xClicked.length + oClicked.length)== 9) && gameFinished==false){
+		document.getElementById('mssgRestart').innerHTML = "No one won the game. Better luck next time :)";
+		document.getElementById('button').innerHTML ="<input type=\"image\" src=\"button_green.png\" onClick=\"window.location.reload();\"  width=\"100px\" height=\"50px\" />"
+		audioNoWin.play();
+	}
+}
+
+</script>
+</head>
+
+<body>
+
+<div  style="background-color:#ffff99" >
+<h1 align="center" style="color:red"> !! TIC TAC TOE !!</h1>
+<hr>
+</div>
+<h1 id="mssg" align="center" style="color:green"></h1>
+<h5 id="mssgRestart" align="center" style="color:red"></h5>
+<div id="button" align="center"></div>
+
+<div class="conatiner">
+<div style="float: left;"> <img src="deadpool.jpg"/></div>
+<div style="float: left;">
+<table  
+width="30%" 
+height="45"
+align="center"
+border="10px"
+style="text-align:center;">
+<tr>
+<td id = "11" onclick = "toggleClicks(this)"><img  id = "img_11" src="box.jpg"
+width="130px" height="130px"/></td>
+<td id = "12" onclick = "toggleClicks(this)"><img id = "img_12" src="box.jpg"
+width="130px" height="130px"/></td>
+<td id = "13" onclick = "toggleClicks(this)"><img id = "img_13" src="box.jpg"
+width="130px" height="130px"/></td>
+</tr>
+
+<tr>
+<td id = "21" onclick = "toggleClicks(this)"><img  id = "img_21" src="box.jpg"
+width="130px" height="130px"/></td>
+<td id = "22" onclick = "toggleClicks(this)"><img id = "img_22" src="box.jpg"
+width="130px" height="130px"/></td>
+<td id = "23" onclick = "toggleClicks(this)"><img id = "img_23" src="box.jpg"
+width="130px" height="130px"/></td>
+</tr>
+
+<tr>
+<td id = "31" onclick = "toggleClicks(this)"><img  id = "img_31" src="box.jpg"
+width="130px" height="130px"/></td>
+<td id = "32" onclick = "toggleClicks(this)"><img id = "img_32" src="box.jpg"
+width="130px" height="130px"/></td>
+<td id = "33" onclick = "toggleClicks(this)"><img id = "img_33" src="box.jpg"
+width="130px" height="130px"/></td>
+</tr>
+</table>
+</div>
+<div style="float: left;"><img src="spidyy.png"/></div>
+ <br style="clear: left;" />
+</div>
+<div  style="background-color:#ffff99" >
+<hr>
+<footer align="center"> Game Developed by <b><a href="nikhil.k320@gmail.com">NIKHIL KHATRI</b></a> </footer>
+</div>
+</body>
+
+</html>
